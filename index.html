@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bhagavad Gita Sloka Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Mukta&family=Montserrat&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #fdfdfd;
+      --text-color: #222;
+      --neon-gold: #ffd700;
+      --neon-glow: 0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffae00;
+    }
+
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #f5f5f5;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Mukta', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1rem;
+      overflow-x: hidden;
+      text-align: center;
+    }
+
+    #cover-page {
+      position: fixed;
+      inset: 0;
+      background: #ffffff;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Montserrat', sans-serif;
+      text-align: center;
+      transition: opacity 1s ease;
+    }
+
+    .cover-content {
+      max-width: 500px;
+      padding: 2rem;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 20px #ffd700;
+      animation: zoomIn 1s ease;
+    }
+
+    #cover-page h1 {
+      font-size: 2.5rem;
+      color: #8b4513;
+      text-shadow: 2px 2px 10px gold;
+    }
+
+    #cover-page p {
+      font-size: 1.1rem;
+      margin: 1rem 0 2rem;
+      color: #444;
+    }
+
+    #start-btn {
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      background: #ffd700;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #ffae00;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    #start-btn:hover {
+      background: #ffcc00;
+    }
+
+    @keyframes zoomIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .main-container {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: var(--neon-glow);
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      border: 2px solid var(--neon-gold);
+    }
+
+    .image-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      border-radius: 1rem;
+      border: 2px solid var(--neon-gold);
+      box-shadow: var(--neon-glow);
+      transition: transform 1s ease, opacity 1s ease;
+    }
+
+    .quote, .meaning {
+      margin: 1rem 0;
+      padding: 1rem 1.2rem;
+      border-radius: 1rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      font-size: 1.2rem;
+    }
+
+    body.dark .quote, body.dark .meaning {
+      background: rgba(0, 0, 0, 0.3);
+      color: #fff;
+    }
+
+    .quote {
+      font-size: 1.4rem;
+      opacity: 0;
+      animation: fadeInText 1s forwards;
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    button {
+      flex: 1 1 48%;
+      padding: 0.6rem 0.8rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #ddd;
+    }
+
+    .particle {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle span {
+      position: absolute;
+      display: block;
+      width: 8px;
+      height: 8px;
+      background: var(--neon-gold);
+      box-shadow: var(--neon-glow);
+      border-radius: 50%;
+      animation: floatUp linear infinite;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(100vh) scale(0.5);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) scale(1);
+        opacity: 0;
+      }
+    }
+
+    .om-symbol {
+      font-size: 3rem;
+      color: var(--neon-gold);
+      text-shadow: var(--neon-glow);
+      margin-top: 1rem;
+    }
+
+    .credit {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.8rem;
+      color: var(black);
+      white-space: nowrap;
+      animation: scrollText 10s linear infinite;
+      text-shadow: var(--neon-glow);
+      z-index: 100;
+    }
+
+    @keyframes scrollText {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    @media (max-width: 600px) {
+      .main-container { padding: 1rem; }
+      .controls { flex-direction: column; }
+      button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- COVER PAGE -->
+  <div id="cover-page">
+    <div class="cover-content">
+      <h1>Bhagavad Gita Sloka</h1>
+      <p>Discover divine wisdom from Lord Krishna with serene music and beautiful verses.</p>
+      <button id="start-btn">Enter</button>
+    </div>
+  </div>
+
+  <div class="particle" id="particle-container"></div>
+  <div class="om-symbol">ॐ</div>
+
+  <div class="main-container">
+    <div class="image-container" id="parallax-bg">
+      <img id="sloka-image" src="images/krishna.jpg" alt="Sloka Image">
+    </div>
+    <div class="quote" id="quote">श्रीभगवानुवाच: कर्मण्येवाधिकारस्ते मा फलेषु कदाचन ।</div>
+    <div class="meaning" id="meaning">तुम्हारा अधिकार केवल कर्म करने में है, उसके फलों में कभी नहीं।</div>
+
+    <div class="controls">
+      <button id="prev">⬅️ Prev</button>
+      <button id="next">Next ➡️</button>
+      <button id="toggle-theme">🌓 Toggle Theme</button>
+      <button id="toggle-font">🔠 Toggle Font</button>
+    </div>
+  </div>
+
+  <div class="credit">Co.Powered by Tirth Bariya</div>
+
+  <audio id="bg-music" loop>
+    <source src="flute.mp3" type="audio/mp3" />
+  </audio>
+
+  <script>
+    const slokas = [
+      {
+        quote: "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन। \n मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि॥",
+        meaning: "तुम्हारा अधिकार केवल कर्म करने में है, उसके फलों में नहीं।",
+        image: "images/sloka1.jpg"
+      },
+      {
+        quote: "यदा यदा हि धर्मस्य ग्लानिर्भवति भारत ।\nअभ्युत्थानमधर्मस्य तदात्मानं सृजाम्यहम् ॥",
+        meaning: "जब-जब धर्म की हानि होती है, मैं प्रकट होता हूँ।\nजब जब अधर्म बढता है तब तब मैं आता हूं, सज्जन लोगों की रक्षा के लिए मै आता हूं।",
+        image: "images/sloka2.jpg"
+      },
+      {
+        quote: "श्रीकृष्णाय वासुदेवाय हरये परमात्मने ।\n प्रणतः क्लेशनाशाय गोविंदाय नमो नमः ॥",
+        meaning: "परमात्मा श्री कृष्ण को मेरा वंदन है। \n जिनके समक्ष सब दुःख समाप्त हो जाते हैं, उन्हें बार-बार प्रणाम करता हूँ, जो गोविंद कहलाते हैं।",
+        image: "images/sloka4.jpg"
+      },
+      {
+        quote: "क्रोधाद्भवति सम्मोह: सम्मोहात्स्मृतिविभ्रम: | स्मृतिभ्रंशाद् बुद्धिनाशो बुद्धिनाशात्प्रणश्यति",
+        meaning: "क्रोध से न्याय के बादल उठते हैं, जिसके परिणामस्वरूप स्मृति का ह्रास होता है। जब स्मृति हतप्रभ हो जाती है, तो बुद्धि नष्ट हो जाती है।",
+        image: "images/sloka3.jpg"
+      },
+      {
+        quote: "वासांसि जीर्णानि यथा विहाय नवानि गृह्णाति नरोऽपराणि | तथा शरीराणि विहाय जीर्णा न्यन्यानि संयाति नवानि देही ।",
+        meaning: "जैसे मनुष्य पुराने वस्त्र छोड़कर नए धारण करता है। वैसे ही आत्मा शरीर से बाहर निकलती है और नए में प्रवेश करती है।",
+        image: "images/sloka4.jpg"
+      }
+    ];
+
+    let index = 0;
+    const quoteEl = document.getElementById("quote");
+    const meaningEl = document.getElementById("meaning");
+    const imageEl = document.getElementById("sloka-image");
+    const bgm = document.getElementById("bg-music");
+
+    function showSloka(i) {
+      const sloka = slokas[i];
+      quoteEl.style.animation = 'none';
+      void quoteEl.offsetWidth;
+      quoteEl.style.animation = 'fadeInText 1s forwards';
+      quoteEl.textContent = sloka.quote;
+      meaningEl.textContent = sloka.meaning;
+      imageEl.style.opacity = 0;
+      setTimeout(() => {
+        imageEl.src = sloka.image;
+        imageEl.style.opacity = 1;
+      }, 300);
+    }
+
+    document.getElementById("next").addEventListener("click", () => {
+      index = (index + 1) % slokas.length;
+      showSloka(index);
+    });
+
+    document.getElementById("prev").addEventListener("click", () => {
+      index = (index - 1 + slokas.length) % slokas.length;
+      showSloka(index);
+    });
+
+    document.getElementById("toggle-theme").addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+    });
+
+    let useAltFont = false;
+    document.getElementById("toggle-font").addEventListener("click", () => {
+      useAltFont = !useAltFont;
+      document.body.style.fontFamily = useAltFont ? 'Montserrat, sans-serif' : 'Mukta, sans-serif';
+    });
+
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
+    document.addEventListener('touchend', e => {
+      const touchEndX = e.changedTouches[0].screenX;
+      if (touchEndX < touchStartX - 50) {
+        index = (index + 1) % slokas.length;
+        showSloka(index);
+      } else if (touchEndX > touchStartX + 50) {
+        index = (index - 1 + slokas.length) % slokas.length;
+        showSloka(index);
+      }
+    });
+
+    const imageContainer = document.getElementById("parallax-bg");
+    document.addEventListener("mousemove", (e) => {
+      const x = (e.clientX - window.innerWidth / 2) / 50;
+      const y = (e.clientY - window.innerHeight / 2) / 50;
+      imageContainer.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    const particleContainer = document.getElementById("particle-container");
+    for (let i = 0; i < 60; i++) {
+      const span = document.createElement("span");
+      span.style.left = `${Math.random() * 100}%`;
+      span.style.animationDuration = `${5 + Math.random() * 10}s`;
+      span.style.animationDelay = `${Math.random() * 5}s`;
+      particleContainer.appendChild(span);
+    }
+
+    document.getElementById("start-btn").addEventListener("click", () => {
+      document.getElementById("cover-page").style.opacity = 0;
+      setTimeout(() => {
+        document.getElementById("cover-page").style.display = "none";
+        showSloka(index);
+        bgm.play(); // Auto play music after user interaction
+      }, 1000);
+    });
+
+    showSloka(index);
+  </script>
+</body>
+</html>
